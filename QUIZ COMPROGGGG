@@ -1,0 +1,58 @@
+import java.util.Scanner;
+
+public class AirplaneSeating {
+    public static final int NUM_ROWS = 13;
+    public static final int NUM_SEATS_PER_ROW = 6;
+
+    public static boolean[][] seatingPlan = new boolean[NUM_ROWS][NUM_SEATS_PER_ROW];
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int choice = 0;
+        while (choice != 2) {
+            System.out.println("1. Reserve a seat");
+            System.out.println("2. Exit");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    String ticketType = "";
+                    while (!ticketType.equals("first class") && !ticketType.equals("business class") && !ticketType.equals("economy class")) {
+                        System.out.print("Enter ticket type: ");
+                        ticketType = scanner.next().toLowerCase();
+                    }
+                    String desiredSeat = scanner.next().toUpperCase();
+                    int row = ticketType.equals("first class") ? 0 : (ticketType.equals("business class") ? 2 : 7);
+                    int seatIndex = (desiredSeat.charAt(1) - '1') + ("ABCDEF".indexOf(desiredSeat.charAt(0)) * 1);
+                    if (seatingPlan[row][seatIndex]) {
+                        System.out.println("Sorry, that seat is not available.");
+                    } else {
+                        seatingPlan[row][seatIndex] = true;
+                        System.out.println("Seat " + desiredSeat + " in " + ticketType + " has been reserved.");
+                    }
+                    break;
+                case 2:
+                    System.out.println("Thank you for using the Airplane Seating program!");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please enter 1 or 2.");
+            }
+            displaySeatingPlan();
+        }
+        scanner.close();
+    }
+
+    public static void displaySeatingPlan() {
+        System.out.print("    ");
+        for (int i = 0; i < NUM_SEATS_PER_ROW; i++) {
+            System.out.print((char)('A' + i) + " ");
+        }
+        System.out.println();
+        for (int i = 0; i < NUM_ROWS; i++) {
+            System.out.printf("Row %2d ", i + 1);
+            for (int j = 0; j < NUM_SEATS_PER_ROW; j++) {
+                System.out.print(seatingPlan[i][j] ? "X " : "* ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
